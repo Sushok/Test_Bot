@@ -24,4 +24,13 @@ async def start_command(message: types.Message):
 
 @router.message(Command(commands=["help"]))
 async def help_command(message: types.Message):
-    await message.reply("Доступные команды:\n/start - начать работу\n/help - помощь")
+    await message.reply("Доступные команды:\n
+/start - знакомство с ботом\n
+/help - справка по командам\n
+/add- /add Задача1 и название задачи добавляет задачу\n
+/subscribe - подписка на уведомления \n
+/list - список задач\n
+/delete - /delete 1 и номер задачи которую нужно удалить \n
+/weather - /weather Киев погода в указанном городе\n
+/unsubscribe - отписка от уведомлений\n
+/subscriptions - список подписок\n")

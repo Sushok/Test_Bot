@@ -4,8 +4,45 @@ from pathlib import Path
 DB_PATH = Path(__file__).parent.parent.parent / "database.db"
 
 def init_db():
+    create_tasks_table()
+    create_users_table()
     create_subscriptions_table()
-    """Инициализация базы данных и создание таблиц"""
+
+def create_users_table():
+    """Создаёт таблицу для пользователей"""
+    with sqlite3.connect(DB_PATH) as conn:
+        cursor = conn.cursor()
+        cursor.execute("""
+        CREATE TABLE IF NOT EXISTS users (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER NOT NULL,
+            username TEXT NOT NULL,
+            name TEXT NOT NULL,
+            surname TEXT NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+        """)
+        conn.commit()
+
+def add_user(user_id: int, username: str, name: str, surname: str):
+    """Добавить пользователя в базу данных"""
+    with sqlite3.connect(DB_PATH) as conn:
+        cursor = conn.cursor()
+        cursor.execute("""
+            INSERT OR IGNORE INTO users (user_id, username, name, surname) 
+            VALUES (?, ?, ?, ?)
+        """, (user_id, username, name, surname))
+        conn.commit()
+
+def get_username_by_id(user_id: int):
+    """Получить пользователя по ID"""
+    with sqlite3.connect(DB_PATH) as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT name, surname FROM users WHERE user_id = ?", (user_id,))
+        return cursor.fetchone()
+
+def create_tasks_table():
+    """Создаёт таблицу для задач"""
     with sqlite3.connect(DB_PATH) as conn:
         cursor = conn.cursor()
         cursor.execute("""

@@ -1,6 +1,7 @@
 from aiogram import Router, types
 from aiogram.filters import Command 
 from bot.services.db import add_user, get_username_by_id
+import re
 
 router = Router()
 
@@ -18,7 +19,7 @@ async def start_command(message: types.Message):
         await message.reply("Привет! Я бот для управления задачами..")
     else: 
         surname, name = user_name
-        await message.reply(f"Привет, {name} {surname}! Я тебя помню!")
+        await message.reply(f"Привет, {re.sub(r'[^a-zA-Zа-яА-ЯёЁ\s]', '', name)} {re.sub(r'[^a-zA-Zа-яА-ЯёЁ\s]', '', surname)}! Я тебя помню!")
 
 
 @router.message(Command(commands=["help"]))
